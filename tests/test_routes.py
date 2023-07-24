@@ -140,30 +140,28 @@ class TestAccountService(TestCase):
     def test_account_not_found(self):
         """It should not read an account that is not found"""
         resp = self.client.get(f"{BASE_URL}/0")
-        self.assertEqual(resp.status_code,status.HTTP_404_NOT_FOUND)
-
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_account_list(self):
         """It should list all the accounts available in the system"""
         self._create_accounts(5)
         resp = self.client.get(BASE_URL)
-        self.assertEqual(resp.status_code,status.HTTP_200_OK)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
-        self.assertEqual(len(data),5)
+        self.assertEqual(len(data), 5)
 
     def test_account_list_not_found(self):
         """It should not list any accounts when there are no accounts available"""
         resp = self.client.get(BASE_URL)
-        self.assertEqual(resp.status_code,status.HTTP_404_NOT_FOUND)
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_update_an_account(self):
         """It should Update an existing Account"""
         test_account = self._create_accounts(1)[0]
         resp = self.client.get(
-            f"{BASE_URL}/{test_account.id}",content_type="application/json"
+            f"{BASE_URL}/{test_account.id}", content_type="application/json"
         )
         self.assertEqual(resp.status_code,status.HTTP_200_OK)
-
         new_account = resp.get_json()
         new_account["name"] = "ABC DEF"
         resp = self.client.put(f"{BASE_URL}/{new_account['id']}",json=new_account)
@@ -171,7 +169,6 @@ class TestAccountService(TestCase):
         updated_account = resp.get_json()
         self.assertEqual(updated_account["name"],"ABC DEF")
         
-
     def test_delete_account(self):
         """It should Delete an Account"""
         account = self._create_accounts(1)[0]
